@@ -1,36 +1,71 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GroundSpawner : MonoBehaviour
 {
-    public GameObject groundPrefab; // Prefab zemì
-    public Transform player; // Hráè
-    public float groundWidth = 10f; // Šíøka jednoho segmentu zemì
+    public GameObject groundPrefab; // Prefab zemÄ›
+    public Transform player; // HrÃ¡Ä
+    public float groundWidth = 10f; // Å Ã­Å™ka jednoho segmentu zemÄ›
     private float nextSpawnX = 0f;
+
+    public GameObject chasingNPC; // NepÅ™Ã­tel (ChasingNPC), kterÃ½ honÃ­ hrÃ¡Äe
+    public float speed = 5f; // Rychlost pohybu hrÃ¡Äe
 
     private void Start()
     {
-        // Na zaèátku vygenerujeme nìkolik segmentù, aby hráè nespadl
+        // Na zaÄÃ¡tku vygenerujeme nÄ›kolik segmentÅ¯, aby hrÃ¡Ä nespadl
         for (int i = 0; i < 5; i++)
         {
             SpawnGround();
         }
+
+
     }
 
     private void Update()
     {
-        // Pokud se hráè blíí k dalšímu místu pro generování, pøidáme zem
+        // Pokud se hrÃ¡Ä blÃ­Å¾Ã­ k dalÅ¡Ã­mu mÃ­stu pro generovÃ¡nÃ­, pÅ™idÃ¡me zem
         if (player.position.x > nextSpawnX - groundWidth)
         {
             SpawnGround();
         }
+
+        // Pohyb hlavnÃ­ postavy
+        float moveX = Input.GetAxis("Horizontal");
+        float moveY = Input.GetAxis("Vertical");
+
+        player.Translate(new Vector2(moveX, moveY) * speed * Time.deltaTime);
     }
 
     void SpawnGround()
     {
-        // Vytvoøení segmentu na správné pozici
+        // VytvoÅ™enÃ­ segmentu na sprÃ¡vnÃ© pozici
         Instantiate(groundPrefab, new Vector2(nextSpawnX, -3), Quaternion.identity);
 
-        // Posuneme pozici pro další segment
-        nextSpawnX += groundWidth; // Posuneme X pozici pro novı segment
+        // Posuneme pozici pro dalÅ¡Ã­ segment
+        nextSpawnX += groundWidth; // Posuneme X pozici pro novÃ½ segment
+    }
+
+    
+
+}
+
+
+public class GameOverTrigger : MonoBehaviour
+{
+    // Funkce, kterÃ¡ se spustÃ­ pÅ™i kolizi
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Zkontrolujeme, zda koliduje hrÃ¡Ä
+        if (collision.gameObject.CompareTag("Player")) // Ujisti se, Å¾e mÃ¡Å¡ tag "Player" na hrÃ¡Äi
+        {
+            // Vypneme hru
+            Application.Quit();
+
+            // Pokud testujeÅ¡ hru v editoru Unity, pouÅ¾ij nÃ¡sledujÃ­cÃ­ Å™Ã¡dek, aby se hra zastavila
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
+        }
     }
 }
