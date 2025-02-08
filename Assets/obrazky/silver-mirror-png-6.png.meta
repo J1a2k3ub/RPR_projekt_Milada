@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bee6154b7a03e714b88ba9a8e9093c6f
+guid: 679b48587f8203b4d99fdaaad755b850
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7612135089760566114
-    second: poop_0
+      213: -5281567268383194127
+    second: silver-mirror-png-6_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: poop_0
+      name: silver-mirror-png-6_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 244
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 26bf677888cb3a960800000000000000
-      internalID: 7612135089760566114
+      spriteID: 1f380b66d8a14b6b0800000000000000
+      internalID: -5281567268383194127
       vertices: []
       indices: 
       edges: []
