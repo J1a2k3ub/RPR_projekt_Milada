@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
+
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f; // Rychlost pohybu
-    public float jumpForce = 7f; // S�la skoku
+    public float jumpForce = 7f; // Síla skoku
     private Rigidbody2D rb;
     private bool isGrounded;
 
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
+        // Hledáme UI text pro počet mincí
         GameObject coinTextObject = GameObject.FindGameObjectWithTag("poop1");
 
         if (coinTextObject != null)
@@ -29,14 +31,15 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Pohyb doprava a doleva �ipkami
+        // Pohyb doprava a doleva pomocí šipek
         float moveInput = Input.GetAxis("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y); // Používáme rb.velocity místo linearVelocity
 
-        // Skok (? �ipka nebo mezern�k)
+        // Skok pokud je hráč na zemi
         if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce); // Skákání - změna pouze Y komponenty
+            isGrounded = false; // Nastavíme, že hráč není na zemi, dokud nedopadne
         }
     }
 
@@ -44,93 +47,27 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = true;
+            isGrounded = true; // Pokud je kontakt se zemí, je hráč na zemi
         }
 
         if (collision.gameObject.CompareTag("Coin"))
         {
-            // Zvýšíme počet mincí
+            // Zvýšení počtu mincí
             coinCount++;
-            // Aktualizujeme text UI pro minci
             if (coinText != null)
             {
-                coinText.text = "poops: " + coinCount.ToString();
+                coinText.text = "poops: " + coinCount.ToString(); // Aktualizace UI textu
             }
 
-            // Zničíme minci, jakmile ji hráč sebere
-            Destroy(collision.gameObject);
+            Destroy(collision.gameObject); // Zničení mince po sebrání
         }
-
-        // Detekce kontaktu se zemí
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
-
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = false;
-        }
-
-        if (collision.gameObject.CompareTag("poop"))
-        {
-            // Zvýšíme počet mincí
-            coinCount++;
-            // Aktualizujeme text UI pro minci
-            coinText.text = "poops: " + coinCount.ToString();
-
-            // Zničíme minci, jakmile ji hráč sebere
-            Destroy(collision.gameObject);
-        }
-
-        // Detekce kontaktu se zemí
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
-    }
-
-
-}
-
-
-public class PlayerJump : MonoBehaviour
-{
-    public float jumpForce = 5f; // Síla skoku
-    private Rigidbody rb;
-    private bool isGrounded; // Zjistí, jestli je hráč na zemi
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>(); // Najde Rigidbody hráče
-
-
-    }
-
-    void Update()
-    {
-        // Skok po stisku mezerníku a pokud je hráč na zemi
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            isGrounded = false; // Zabrání dvojitému skoku
-        }
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        // Když se hráč dotkne země, nastavíme isGrounded na true
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
+            isGrounded = false; // Pokud hráč opustí zem, není na ní
         }
     }
 }
-
-
-
-
