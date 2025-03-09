@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      silver-mirror-png-6_0: -5281567268383194127
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

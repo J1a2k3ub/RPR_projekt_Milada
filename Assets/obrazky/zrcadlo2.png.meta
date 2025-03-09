@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      zrcadlo2_0: 2684101446888913469
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // Pro práci s UI (Text pro zobrazení počtu hovínek)
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,44 +10,60 @@ public class PlayerController : MonoBehaviour
 
     public Text coinText; // UI Text pro počet mincí
     private int coinCount = 0; // Počet nasbíraných hovínek
+    public Audio_manager audioManager; // Přímé propojení s Audio_managerem (nastavit v Inspectoru!)
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        // Pokud není Audio_manager nastaven ručně, zkusíme ho vyhledat jinak:
+        if (audioManager == null)
+        {
+            GameObject audioObject = GameObject.Find("Audio Manager"); // Hledání podle názvu GameObjectu
+            if (audioObject != null)
+            {
+                audioManager = audioObject.GetComponent<Audio_manager>();
+            }
+        }
+
         // Inicializace počtu hovínek
         coinText.text = "Poops: " + coinCount.ToString();
     }
 
     void Update()
     {
-        // Pohyb doprava a doleva pomocí šipek
         float moveInput = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
 
-        // Skok, pokud je hráč v kontaktu se zemí/objektem
         if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)) && groundContacts > 0)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+            if (audioManager != null && audioManager.Skok != null)
+            {
+                audioManager.PlayEfekty(audioManager.Skok);
+            }
+            else
+            {
+                Debug.LogWarning("Audio_manager nebo zvuk skoku není přiřazen!");
+            }
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Jakýkoliv kontakt znamená, že je hráč na zemi
         groundContacts++;
 
-        // Pokud se hráč dotkne hovínka (s tagem "Coin"), přičteme bod
         if (collision.gameObject.CompareTag("Coin"))
         {
-            coinCount++; // Zvyšujeme počet hovínek
-            coinText.text = "Poops: " + coinCount.ToString(); // Aktualizujeme zobrazení počtu
-            Destroy(collision.gameObject); // Zničíme sebrané hovínko
+            coinCount++;
+            coinText.text = "Poops: " + coinCount.ToString();
+            Destroy(collision.gameObject);
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        // Pokud opustíme objekt, snížíme počet kontaktů
         if (collision.gameObject.CompareTag("Ground"))
         {
             groundContacts--;
