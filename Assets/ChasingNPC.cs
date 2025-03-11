@@ -28,7 +28,7 @@ public class ChasingNPC : MonoBehaviour
         {
             Debug.Log("Game Over!");
             // Restart hry
-            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("GameOver");
         }
     }
 }
