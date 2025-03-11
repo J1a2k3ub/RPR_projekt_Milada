@@ -17,4 +17,6 @@ public class CameraFollow : MonoBehaviour
         // Ujistíme se, že kamera se bude pohybovat pouze v ose X a Y (nebo jiných požadovaných osách)
         transform.position = new Vector3(smoothedPosition.x, transform.position.y, transform.position.z);
     }
+
+
 }
