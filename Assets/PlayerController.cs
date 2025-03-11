@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 5f; // Rychlost pohybu
     public float jumpForce = 5f; // Síla skoku
     private Rigidbody2D rb;
-    private int groundContacts = 0; // Počítadlo kontaktů se zemí/objektem
+    private bool isGrounded = false; // Hráč stojí na pevném povrchu
 
     public Text coinText; // UI Text pro počet mincí
     private int coinCount = 0; // Počet nasbíraných hovínek
@@ -16,17 +16,15 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        // Pokud není Audio_manager nastaven ručně, zkusíme ho vyhledat jinak:
         if (audioManager == null)
         {
-            GameObject audioObject = GameObject.Find("Audio Manager"); // Hledání podle názvu GameObjectu
+            GameObject audioObject = GameObject.Find("Audio Manager");
             if (audioObject != null)
             {
                 audioManager = audioObject.GetComponent<Audio_manager>();
             }
         }
 
-        // Inicializace počtu hovínek
         coinText.text = "Poops: " + coinCount.ToString();
     }
 
@@ -35,9 +33,10 @@ public class PlayerController : MonoBehaviour
         float moveInput = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
 
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)) && groundContacts > 0)
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            isGrounded = false; // Hráč už není na zemi
 
             if (audioManager != null && audioManager.Skok != null)
             {
@@ -52,7 +51,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        groundContacts++;
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (contact.normal.y > 0.5f)
+            {
+                isGrounded = true;
+                Debug.Log("Přistání na: " + collision.gameObject.name);
+                break;
+            }
+        }
 
         if (collision.gameObject.CompareTag("Coin"))
         {
@@ -64,9 +71,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        foreach (ContactPoint2D contact in collision.contacts)
         {
-            groundContacts--;
+            if (contact.normal.y > 0.5f)
+            {
+                isGrounded = false;
+                Debug.Log("Opustil: " + collision.gameObject.name);
+                break;
+            }
         }
     }
 }
