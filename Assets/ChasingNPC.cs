@@ -3,7 +3,7 @@ using UnityEngine;
 public class ChasingNPC : MonoBehaviour
 {
     public Transform player; // Hráč
-    public float speed = 4f; // Rychlost pohybu
+    public float speed = 5f; // Rychlost pohybu
     private Rigidbody2D rb; // Rigidbody pro pohyb
 
     void Start()
@@ -21,14 +21,13 @@ public class ChasingNPC : MonoBehaviour
         rb.MovePosition(targetPosition); // Move NPC do nové pozice
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        // Pokud NPC narazí na hráče
-        if (collision.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("Game Over!");
-            // Restart hry
+            ScoreManager.instance.UlozitSkore();
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameOver");
         }
     }
+
 }

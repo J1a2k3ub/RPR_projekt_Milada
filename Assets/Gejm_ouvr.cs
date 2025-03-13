@@ -6,7 +6,7 @@ public class Gejm_ouvr : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText; // Text pro skóre na Game Over panelu
 
-    public void ShowGameOver()
+    /*public void ShowGameOver()
     {
         // Zkontroluj, zda máme uložené skóre a zobraz je
         if (PlayerPrefs.HasKey("Score"))
@@ -19,7 +19,7 @@ public class Gejm_ouvr : MonoBehaviour
             scoreText.text = "Score: 0"; // Pokud žádné skóre není, zobrazí 0
         }
     }
-
+    */
     public void Restart()
     {
         // Restartování hry
