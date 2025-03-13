@@ -3,12 +3,17 @@ using UnityEngine;
 
 public class ScoreGameOver : MonoBehaviour
 {
-    public TextMeshProUGUI scoreText; // Pøipoj UI text v Game Over scénì
+    public TextMeshProUGUI scoreText;
 
     void Start()
     {
         int finalniSkore = PlayerPrefs.GetInt("Score", 0);
-        scoreText.text = "Score: " + finalniSkore;
-        Debug.Log(" GameOver Score: " + finalniSkore);
+
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + finalniSkore;
+        }
+
+        Debug.Log("GameOver Score: " + finalniSkore);
     }
 }

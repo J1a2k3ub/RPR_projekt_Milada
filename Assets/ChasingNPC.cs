@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ChasingNPC : MonoBehaviour
 {
@@ -25,8 +26,12 @@ public class ChasingNPC : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            ScoreManager.instance.UlozitSkore();
-            UnityEngine.SceneManagement.SceneManager.LoadScene("GameOver");
+            if (ScoreManager.instance != null)
+            {
+                ScoreManager.instance.UlozitSkore(); // Uložit skóre před přechodem na Game Over
+            }
+
+            SceneManager.LoadScene("GameOver");
         }
     }
 
