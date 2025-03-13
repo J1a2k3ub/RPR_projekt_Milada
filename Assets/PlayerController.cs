@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 5f; // Rychlost pohybu
     public float jumpForce = 5f; // Síla skoku
     private Rigidbody2D rb;
-    private int groundContacts = 0; // Počítadlo kontaktů se zemí/objektem
+    private bool isGrounded = false; // Určuje, zda je postava na pevném povrchu
 
     public Text coinText; // UI Text pro počet mincí
     private int coinCount = 0; // Počet nasbíraných hovínek
@@ -25,19 +25,18 @@ public class PlayerController : MonoBehaviour
                 audioManager = audioObject.GetComponent<Audio_manager>();
             }
         }
-
-        // Inicializace počtu hovínek
-        coinText.text = "Poops: " + coinCount.ToString();
     }
 
     void Update()
     {
+        // Pohyb postavy
         float moveInput = Input.GetAxis("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y); // Používáme velocity místo linearVelocity
 
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)) && groundContacts > 0)
+        // Skok, pokud je postava na zemi nebo na překážce (tag "Ground" nebo "Obstacle")
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce); // Skok na ose Y
 
             if (audioManager != null && audioManager.Skok != null)
             {
@@ -50,23 +49,38 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Detekce kontaktu s objektem (zemí nebo překážkou)
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        groundContacts++;
-
-        if (collision.gameObject.CompareTag("Coin"))
+        // Pokud je postava v kontaktu s objektem, který má tag "Ground" nebo "Obstacle"
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Obstacle"))
         {
-            coinCount++;
-            coinText.text = "Poops: " + coinCount.ToString();
-            Destroy(collision.gameObject);
+            isGrounded = true; // Pokud je postava na zemi nebo překážce, umožníme skákání
         }
     }
 
+    // Detekce ukončení kontaktu s objektem
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        // Pokud postava přestane být na zemi nebo překážce, skákání není možné
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Obstacle"))
         {
-            groundContacts--;
+            isGrounded = false;
         }
+    }
+
+    // Generování země
+    public GameObject groundPrefab; // Prefab pro generování nové země
+    public Transform player; // Odkaz na postavu, abychom věděli, kde generovat novou zem
+
+    void GenerateGround()
+    {
+        // Předpokládáme, že generování je 5 jednotek vpravo od postavy
+        Vector3 spawnPosition = player.transform.position + new Vector3(5, 0, 0); // Generuje objekty 5 jednotek vpravo od hráče
+
+        // Vytvoříme nový objekt pro zem
+        GameObject newGround = Instantiate(groundPrefab, spawnPosition, Quaternion.identity);
+        newGround.tag = "Ground"; // Ujisti se, že má správný tag
+        newGround.AddComponent<BoxCollider2D>(); // Pokud nemá Collider, přidej ho
     }
 }

@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pozadiGO_0: 4358757476171273990
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

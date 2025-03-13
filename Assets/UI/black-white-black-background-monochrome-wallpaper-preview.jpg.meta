@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      black-white-black-background-monochrome-wallpaper-preview_0: 7164000089469501966
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
