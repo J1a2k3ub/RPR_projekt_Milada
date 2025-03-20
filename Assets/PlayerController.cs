@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f; // Rychlost pohybu
-    public float jumpForce = 5f; // Síla skoku
+    public float speed = 15f; // Rychlost pohybu
+    public float jumpForce = 10f; // Síla skoku
     private Rigidbody2D rb;
     private bool isGrounded = false; // Určuje, zda je postava na pevném povrchu
 
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y); // Používáme velocity místo linearVelocity
 
         // Skok, pokud je postava na zemi nebo na překážce (tag "Ground" nebo "Obstacle")
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)))
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce); // Skok na ose Y
 

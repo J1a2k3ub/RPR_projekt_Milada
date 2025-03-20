@@ -38,7 +38,7 @@ public class PoopCollector : MonoBehaviour
     {
         if (scoreText != null)
         {
-            scoreText.text = "Hovínka: " + score; // Aktualizace UI textu
+            scoreText.text = "poops: " + score; // Aktualizace UI textu
         }
         else
         {
@@ -48,7 +48,7 @@ public class PoopCollector : MonoBehaviour
 
     void Update()
     {
-        scoreText.text = "Hovínka: " + score;
+        scoreText.text = "poops: " + score;
     }
 
 }

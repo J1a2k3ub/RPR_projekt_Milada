@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 public class ChasingNPC : MonoBehaviour
 {
     public Transform player; // Hráč
-    public float speed = 50f; // Rychlost pohybu
-    private Rigidbody2D rb; // Rigidbody pro pohyb
+    public float speed = 1f; // Rychlost pohybu
+    private Rigidbody2D rb; // Rigidbody pro pohybs
 
     void Start()
     {
